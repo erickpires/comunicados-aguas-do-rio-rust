@@ -1,0 +1,13 @@
+[package]
+name = "comunicados-aguas-do-rio-rust"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+chrono = "0.4.38"
+dotenv = "0.15.0"
+reqwest = "0.12.7"
+scraper = "=0.20.0"
+sha1 = "0.10.6"
+telegram-bot-api = "0.1.2"
+tokio = "1.40.0"
