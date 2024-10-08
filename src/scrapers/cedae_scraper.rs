@@ -6,8 +6,6 @@ use crate::{error::Error, news_post::NewsPost};
 
 use super::Scraper;
 
-const CEDAE_NEWS_URL: &str = "https://cedae.com.br/Noticias/";
-
 pub struct CedaeScraper {
     base_url: Url,
 
@@ -56,7 +54,7 @@ impl CedaeScraper {
 
     pub fn new() -> Self {
         Self {
-            base_url: Url::parse(CEDAE_NEWS_URL).unwrap(),
+            base_url: Url::parse("https://cedae.com.br/Noticias/").unwrap(),
 
             news_list_selector: Selector::parse(".lista-busca").unwrap(),
             links_selector: Selector::parse("a").unwrap(),

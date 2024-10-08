@@ -4,7 +4,7 @@ mod telegram_bot;
 mod error;
 
 use dotenv::dotenv;
-use scrapers::{cedae_scraper::{self, CedaeScraper}, Scraper};
+use scrapers::{cedae_scraper::{self, CedaeScraper}, rio_saneamento_scraper::RioSaneamentoScraper, Scraper};
 use std::env;
 
 #[tokio::main]
@@ -15,7 +15,8 @@ async fn main() {
     let chat_id = env::var("CHAT_ID").expect("Could not read CHAT_ID");
 
     let cedae_scraper = CedaeScraper::new();
-    let data = cedae_scraper.get_posts().await;
+    let rio_saneamento_scraper = RioSaneamentoScraper::new();
+    let data = rio_saneamento_scraper.get_posts().await;
 
     // let bot = telegram_bot::TelegramBot::new(api_key, chat_id).await;
 
