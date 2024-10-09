@@ -5,6 +5,7 @@ use crate::error::Error;
 
 pub mod cedae_scraper;
 pub mod rio_saneamento_scraper;
+pub mod igua_scraper;
 
 #[async_trait(?Send)]
 pub trait Scraper {

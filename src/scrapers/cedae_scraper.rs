@@ -26,7 +26,7 @@ impl Scraper for CedaeScraper {
 
         let mut ans = Vec::new();
         for news_post_element in news_posts_wrapper_element.select(&self.links_selector) {
-            let post_title = news_post_element.text().collect::<String>();
+            let post_title = news_post_element.text().map(str::trim).collect();
             let post_url = news_post_element.value().attr("href").ok_or(Error::AttrNotFound("href"))?;
 
             let post = self.get_post_date_and_content(post_title, post_url).await?;
@@ -47,7 +47,7 @@ impl CedaeScraper {
         let content_element = html.select(&self.content_element_selector).next().ok_or(Error::ElementNotFound("[id$=NewsBody]"))?;
 
         let date_text = date_element.text().collect::<String>();
-        let content_text = content_element.text().collect::<String>();
+        let content_text = content_element.text().map(str::trim).collect();
 
         let date = NaiveDate::parse_from_str(&date_text, "%d/%m/%Y").ok();
 

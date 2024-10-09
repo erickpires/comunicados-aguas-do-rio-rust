@@ -66,7 +66,7 @@ impl RioSaneamentoScraper {
                 let date_text = date_element.text().collect::<String>();
 
                 Ok(RioSaneamentoPost {
-                    title: title_element.text().map(|s| s.trim()).collect(),
+                    title: title_element.text().map(str::trim).collect(),
                     url: self.base_url.join(post_url).unwrap(),
                     // NOTE: Rio + Saneamento uses single digit dates
                     date: NaiveDate::parse_from_str(date_text.trim(), "%_d/%m/%Y").ok(),
@@ -88,7 +88,7 @@ impl RioSaneamentoScraper {
                 let date_text = date_element.text().collect::<String>();
 
                 Ok(RioSaneamentoPost {
-                    title: title_element.text().map(|s| s.trim()).collect(),
+                    title: title_element.text().map(str::trim).collect(),
                     url: self.base_url.join(post_url).unwrap(),
                     // NOTE: Rio + Saneamento uses single digit dates
                     date: NaiveDate::parse_from_str(date_text.trim(), "%_d/%m/%Y").ok(),
@@ -103,7 +103,7 @@ impl RioSaneamentoScraper {
 
         let content_element = html.select(&self.post_content_selector).next().ok_or(Error::ElementNotFound(".content-single__content"))?;
 
-        Ok(content_element.text().map(|s| s.trim()).collect())
+        Ok(content_element.text().map(str::trim).collect())
     }
 
     pub fn new() -> Self {
