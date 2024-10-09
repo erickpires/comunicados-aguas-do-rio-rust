@@ -46,6 +46,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "async-trait"
+version = "0.1.83"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "721cae7de5c34fbb2acd27e21e6d2cf7b886dce0c27388d46c4e6c47ea4318dd"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "atomic-waker"
 version = "1.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -156,6 +167,7 @@ dependencies = [
 name = "comunicados-aguas-do-rio-rust"
 version = "0.1.0"
 dependencies = [
+ "async-trait",
  "chrono",
  "dotenv",
  "reqwest 0.12.7",

@@ -1,3 +1,4 @@
+use async_trait::async_trait;
 use chrono::NaiveDate;
 use reqwest::Url;
 use scraper::{selectable::Selectable, Html, Selector};
@@ -29,6 +30,8 @@ pub struct RioSaneamentoScraper {
     post_content_selector: Selector,
 }
 
+
+#[async_trait(?Send)]
 impl Scraper for RioSaneamentoScraper {
     async fn get_posts(&self) -> Result<Vec<NewsPost>, Error> {
         let data = reqwest::get(self.base_url.clone()).await?.text().await?;

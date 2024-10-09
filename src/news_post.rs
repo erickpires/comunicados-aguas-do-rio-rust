@@ -29,6 +29,22 @@ impl NewsPost {
         &self.id
     }
 
+    pub fn title(&self) -> &str {
+        &self.title
+    }
+
+    pub fn url(&self) -> &str {
+        &self.url
+    }
+
+    pub fn date(&self) -> &Option<NaiveDate>  {
+        &self.date
+    }
+
+    pub fn content(&self) -> &str {
+        &self.content
+    }
+
     pub fn as_markdown_string(&self) -> String {
         let mut ans = String::new();
 
