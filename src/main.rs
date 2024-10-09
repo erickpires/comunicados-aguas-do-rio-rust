@@ -4,7 +4,7 @@ mod telegram_bot;
 mod error;
 
 use dotenv::dotenv;
-use scrapers::{cedae_scraper::CedaeScraper, igua_scraper::IguaScraper, rio_saneamento_scraper::RioSaneamentoScraper, Scraper};
+use scrapers::{aguas_do_rio_scraper::AguasDoRioScraper, cedae_scraper::CedaeScraper, igua_scraper::IguaScraper, rio_saneamento_scraper::RioSaneamentoScraper, Scraper};
 use std::env;
 
 #[tokio::main]
@@ -18,6 +18,7 @@ async fn main() {
         Box::new(CedaeScraper::new()), 
         Box::new(RioSaneamentoScraper::new()), 
         Box::new(IguaScraper::new()),
+        Box::new(AguasDoRioScraper::new()),
     ];
 
     for scraper in scrapers {

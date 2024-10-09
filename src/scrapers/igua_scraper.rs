@@ -36,7 +36,7 @@ impl Scraper for IguaScraper {
             let url_str = link_element.value().attr("href").ok_or(Error::AttrNotFound("href"))?;
             let date_text = date_element.text().collect::<String>();
             
-            let title = title_element.text().map(str::trim).collect::<String>();
+            let title = title_element.text().map(str::trim).collect();
             let url = self.base_url.join(url_str).unwrap();
             let date = Self::parse_date(&date_text);
             let content = self.get_post_content(url.clone()).await?;
