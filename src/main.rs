@@ -13,6 +13,7 @@ async fn main() {
 
     let api_key = env::var("BOT_API_KEY").expect("Could not read BOT_API_KEY");
     let chat_id = env::var("CHAT_ID").expect("Could not read CHAT_ID");
+    let bot = telegram_bot::TelegramBot::new(api_key, chat_id).await;
 
     let scrapers: Vec<Box<dyn Scraper>> = vec![
         Box::new(CedaeScraper::new()), 
@@ -22,16 +23,10 @@ async fn main() {
     ];
 
     for scraper in scrapers {
-        let posts = scraper.get_posts().await.expect("Failed to get posts");
+        let posts = scraper.get_posts().await.unwrap(); // TODO: Notify owner
 
         for post in posts {
-            println!("{} - {:?}", post.title(), post.date().map(|d| d.format("%d/%m/%Y")));
-            println!("{}\n", post.url());
-            println!("{}\n\n\n\n", post.content());
+            bot.send_message(&post.as_markdown_string()).await.unwrap(); // TODO: Notify owner
         }
     }
-
-    // let bot = telegram_bot::TelegramBot::new(api_key, chat_id).await;
-
-    // bot.send_message("Hello!!!2").await.expect("Failed to send message");
 }

@@ -1,7 +1,13 @@
-use std::fmt::Write;
+use std::{borrow::Cow, fmt::Write};
 
 use chrono::NaiveDate;
+use lazy_static::lazy_static;
+use regex::Regex;
 use sha1::{Digest, Sha1};
+
+lazy_static! {
+    static ref LINE_BREAK_RE: Regex = Regex::new(r"(\r?\n)+").unwrap();
+}
 
 #[derive(Debug, Clone)]
 pub struct NewsPost {
@@ -29,33 +35,25 @@ impl NewsPost {
         &self.id
     }
 
-    pub fn title(&self) -> &str {
-        &self.title
-    }
-
-    pub fn url(&self) -> &str {
-        &self.url
-    }
-
     pub fn date(&self) -> &Option<NaiveDate>  {
         &self.date
     }
 
-    pub fn content(&self) -> &str {
-        &self.content
+    pub fn as_markdown_string(&self) -> String {
+        let date_str = self.date.map(|d| d.format("%d/%m/%Y").to_string()).unwrap_or("-".to_string());
+
+        let mut ans = String::new();
+        write!(&mut ans, "[{}]({})\n\n", self.title, self.url).expect("Unexpected error formating post");
+        write!(&mut ans, "_Data: {}_\n\n", date_str).expect("Unexpected error formating post");
+
+        ans.push_str(self.formated_content().as_ref());
+        
+        ans
     }
 
-    pub fn as_markdown_string(&self) -> String {
-        let mut ans = String::new();
+    fn formated_content(&self) -> Cow<'_, str> {
+        let ans = LINE_BREAK_RE.replace_all(&self.content, "\n\n");
 
-        write!(&mut ans, "[{}]({})\n\n", self.title, self.url).expect("Unexpected error formating post");
-        if let Some(date) = &self.date {
-            ans.push_str("Data: ");
-            ans.push_str(&date.format("%d/%m/%Y").to_string());
-            ans.push_str("\n\n");
-        }
-
-        ans.push_str(&self.content);
         
         ans
     }

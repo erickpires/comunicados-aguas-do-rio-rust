@@ -2,11 +2,18 @@
 pub enum Error<'a> {
     ConnectionError(reqwest::Error),
     ElementNotFound(&'a str),
-    AttrNotFound(&'a str)
+    AttrNotFound(&'a str),
+    TelegramApiError(),
 }
 
-impl<'a> From<reqwest::Error> for Error<'a> {
+impl From<reqwest::Error> for Error<'_> {
     fn from(value: reqwest::Error) -> Self {
-        Error::ConnectionError(value)
+        Self::ConnectionError(value)
+    }
+}
+
+impl From<telegram_bot_api::bot::APIResponseError> for Error<'_> {
+    fn from(_: telegram_bot_api::bot::APIResponseError) -> Self {
+        Self::TelegramApiError()
     }
 }
