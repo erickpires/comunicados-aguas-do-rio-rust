@@ -103,7 +103,7 @@ impl RioSaneamentoScraper {
 
         let content_element = html.select(&self.post_content_selector).next().ok_or(Error::ElementNotFound(".content-single__content"))?;
 
-        Ok(content_element.text().map(str::trim).collect())
+        Ok(content_element.text().collect())
     }
 
     pub fn new() -> Self {

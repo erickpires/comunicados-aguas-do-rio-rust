@@ -55,7 +55,7 @@ impl IguaScraper {
 
         let content_element = html.select(&self.post_content_selector).next().ok_or(Error::ElementNotFound(".news-spotlight > div"))?;
 
-        Ok(content_element.text().map(str::trim).collect())
+        Ok(content_element.text().collect())
     }
 
     fn parse_date(date_text: &str) -> Option<NaiveDate> {

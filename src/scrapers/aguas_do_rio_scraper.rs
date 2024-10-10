@@ -40,7 +40,7 @@ impl Scraper for AguasDoRioScraper {
 
             let title = title_element.text().map(str::trim).collect();
             let date_text = date_element.text().collect::<String>();
-            let mut content = content_element.text().map(str::trim).collect::<String>();
+            let mut content = content_element.text().collect::<String>();
 
             let link_str = link_element.value().attr("href").ok_or(Error::AttrNotFound("href"))?;
             let url = self.base_url.join(link_str).unwrap();
@@ -66,7 +66,7 @@ impl AguasDoRioScraper {
 
         let content_element = html.select(&self.full_content_selector).next().ok_or(Error::ElementNotFound(".article-inline-text"))?;
 
-        let content = content_element.text().map(str::trim).collect();
+        let content = content_element.text().collect();
         
         Ok(content)
     }

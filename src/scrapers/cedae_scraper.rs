@@ -47,7 +47,7 @@ impl CedaeScraper {
         let content_element = html.select(&self.content_element_selector).next().ok_or(Error::ElementNotFound("[id$=NewsBody]"))?;
 
         let date_text = date_element.text().collect::<String>();
-        let content_text = content_element.text().map(str::trim).collect();
+        let content_text = content_element.text().collect();
 
         let date = NaiveDate::parse_from_str(&date_text, "%d/%m/%Y").ok();
 

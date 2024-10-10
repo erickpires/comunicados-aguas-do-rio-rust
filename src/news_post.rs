@@ -52,9 +52,9 @@ impl NewsPost {
     }
 
     fn formated_content(&self) -> Cow<'_, str> {
-        let ans = LINE_BREAK_RE.replace_all(&self.content, "\n\n");
+        let trimmed_content = self.content.trim();
+        let ans = LINE_BREAK_RE.replace_all(trimmed_content, "\n\n");
 
-        
         ans
     }
 }
