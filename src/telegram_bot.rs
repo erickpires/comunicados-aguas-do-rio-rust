@@ -69,7 +69,8 @@ impl<'a> Iterator for MessageSplitIterator<'a> {
         // searching for a space characters. If no neither case is found, 
         // we split the message at the last possible character.
 
-        let max_slice = &self.msg[..MESSAGE_MAX_SIZE];
+        let max_slice_boundary = find_floor_char_boundary(self.msg, MESSAGE_MAX_SIZE);
+        let max_slice = &self.msg[..max_slice_boundary];
 
         if let Some(index) = max_slice.rfind('\n') {
             let ans = Some((self.msg[..index].trim(), true));
@@ -83,7 +84,7 @@ impl<'a> Iterator for MessageSplitIterator<'a> {
             return ans;
         }
 
-        self.msg = &self.msg[MESSAGE_MAX_SIZE..];
+        self.msg = &self.msg[max_slice_boundary..];
         
         Some((max_slice, true))
     }
@@ -95,4 +96,12 @@ impl<'a> MessageSplitIterator<'a> {
             msg: msg.trim()
         }
     }
+}
+
+fn find_floor_char_boundary(s: &str, mut index: usize) -> usize {
+    while !s.is_char_boundary(index) {
+        index -= 1;
+    }
+
+    return index;
 }
