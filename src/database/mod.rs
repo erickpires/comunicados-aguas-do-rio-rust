@@ -8,7 +8,7 @@ pub struct Database {
 }
 
 impl<'a> Database {
-    pub fn new() -> Result<Self, Error<'a>> {
+    pub fn new() -> Result<Self, Error> {
         let connection = Connection::open("./data.db")?;
 
         connection.execute("CREATE TABLE IF NOT EXISTS Posts (

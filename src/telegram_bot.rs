@@ -5,23 +5,36 @@ use tokio::time::sleep;
 
 use crate::error::Error;
 
-const MESSAGES_INTERVAL: u64 = 3000;
+pub enum TelegramParseMode {
+    Markdown,
+    PlainText
+}
+
+impl TelegramParseMode {
+    fn get_value(&self) -> Option<String> {
+        match self {
+            TelegramParseMode::Markdown => Some("Markdown".to_string()),
+            TelegramParseMode::PlainText => None,
+        }
+    }
+}
+
 pub struct TelegramBot {
-    bot_api: BotApi,
-    chat_id: String
+    bot_api: BotApi
 }
 
 impl TelegramBot {
-    pub async fn new(token: String, chat_id: String) -> Self {
+    pub async fn new(token: String) -> Self {
         let bot_api = bot::BotApi::new(token, None).await.expect("Failed to login");
 
         Self { 
-            bot_api,
-            chat_id
+            bot_api
         }
     }
 
-    pub async fn send_message(&self, msg: &str) -> Result<(), Error> {
+    pub async fn send_message(&self, msg: &str, chat_id: &str, parse_mode: TelegramParseMode) -> Result<(), Error> {
+        const MESSAGES_INTERVAL: u64 = 3000;
+
         let requests = MessageSplitIterator::new(msg)
             .map(|(msg, should_insert_ellipsis)| {
                 let mut text = msg.to_string();
@@ -29,8 +42,8 @@ impl TelegramBot {
                     text.push_str(" […]");
                 }
 
-                let mut request = SendMessage::new(telegram_bot_api::types::ChatId::StringType(self.chat_id.clone()), text);
-                request.parse_mode = Some("Markdown".to_string());
+                let mut request = SendMessage::new(telegram_bot_api::types::ChatId::StringType(chat_id.to_string()), text);
+                request.parse_mode = parse_mode.get_value();
 
                 request
             })
