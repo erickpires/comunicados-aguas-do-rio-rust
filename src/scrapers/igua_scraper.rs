@@ -50,7 +50,8 @@ impl Scraper for IguaScraper {
 
 impl IguaScraper {
     async fn get_post_content(&self, url: Url) -> Result<String, Error> {
-        let data = reqwest::get(url).await?.text().await?;
+        let data = reqwest::get(url).await?.text().await?.replace("<p", "\n<p");
+        
         let html = Html::parse_document(&data);
 
         let content_element = html.select(&self.post_content_selector).next().ok_or(Error::ElementNotFound(".news-spotlight > div"))?;
