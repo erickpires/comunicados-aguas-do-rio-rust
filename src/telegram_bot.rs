@@ -1,7 +1,11 @@
+use std::time::Duration;
+
 use telegram_bot_api::{bot::{self, BotApi}, methods::SendMessage};
+use tokio::time::sleep;
 
 use crate::error::Error;
 
+const MESSAGES_INTERVAL: u64 = 3000;
 pub struct TelegramBot {
     bot_api: BotApi,
     chat_id: String
@@ -35,6 +39,7 @@ impl TelegramBot {
         // TODO: Make a stream from the Iterator and avoid this Vec.
         for request in requests {
             self.bot_api.send_message(request).await?;
+            sleep(Duration::from_millis(MESSAGES_INTERVAL)).await;
         }
 
         Ok(())
